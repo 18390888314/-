@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>img</title>
+    <link href="/css/bootstrap.css" rel="stylesheet">
+</head>
+<style>
+    *{margin:0px;paading:0px;font-size:20px;}
+    .content{margin-top:100px;}
+</style>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">小小相册</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/">全部相册<span class="sr-only">(current)</span></a></li>
+                <li><a href="/up">上传</a></li>
+            </ul>
+          <ul class="nav navbar-nav pull-right">
+            <% if(user=="1"){ %>
+           <li>
+                    <p class="navbar-brand">欢迎您</p>
+           </li>
+              <li>
+                    <p class="navbar-brand"><%= username %></p>
+              </li>
+               <li> <div class="form-group">
+                    <p class="navbar-brand"><a href="/change">设置资料</a></p>
+                </div>
+              </li>
+            <% }else { %>
+            <li>
+                    <a class="navbar-brand" href="/register">注册</a>
+              </li>
+              <li>
+                <div class="form-group">
+                    <a class="navbar-brand" href="/login">登录</a>
+                </div>
+              </li>
+            <% }%>
+            </ul>
+
+    </div><!--/.navbar-collapse -->
+    </div>
+</nav>
+
+<div class="container content">
+    <div class="row">
+        <form style="width:40%;" method="post" action="/uphead" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label for="exampleInputFile">选择图片</label>
+                <p>尺寸小于4M</p>
+                <input type="file" id="exampleInputFile"  name="tupian">
+            </div>
+
+            <button type="submit" class="btn btn-default">上传</button>
+        </form>
+    </div>
+</div>
+
+<script src="/js/jquery-3.2.1.js"></script>
+<script src="/js/bootstrap.js"></script>
+</body>
+</html>

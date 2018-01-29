@@ -1,0 +1,49 @@
+<html lang="zh-CN">
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+<meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Signin Template for Bootstrap</title>
+                               <link href="css/bootstrap.css" rel="stylesheet">
+    <script src="js/jquery-3.2.1.js"></script>
+    <style>
+        *{margin:0px;paading:0px;font-size:20px;}
+    body{background:#cccccc;}
+</style>
+</head>
+
+<body>
+
+<div class="container col-lg-4 col-lg-offset-4">
+
+
+    <h2 class="form-signin-heading">创建图片库</h2>
+    <label for="inputName" class="sr-only">库名</label>
+    <input type="text" id="inputnewfile" class="form-control" placeholder="库名" name="filename" required autofocus>
+<div class="checkbox">
+    </div>
+    <button class="btn btn-lg btn-primary btn-block">创建</button>
+
+
+    </div> <!-- /container -->
+</body>
+</html>
+<script type="text/javascript">
+    $(".btn").click(function () {
+        $.get("/donewfile",{
+            "filename":$("#inputnewfile").val(),
+        },function(result) {
+            if(result.result=="1"){
+                //$("#inputnewfile").val("");
+               alert("图片库创建成功");
+             window.location.href="/";
+            }
+
+        })
+    });
+</script>

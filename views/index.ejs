@@ -1,0 +1,237 @@
+ <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>相册</title>
+    <link href="css/bootstrap.css" rel="stylesheet">
+</head>
+<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+<script src="js/underscore.js"></script>
+<script src="js/jquery-3.2.1.js"></script>
+<script src="js/bootstrap.js"></script>
+<style>
+    body{background:url("images/bg.jpg")no-repeat;background-size: cover;}
+    *{margin:0px;paading:0px;font-size:20px;}
+    h3{text-align:center}
+    h5{display:inline-block;padding-right: 20px;}
+    #chenggong,#shibai{
+        display: none;
+    }
+ .container{margin-top: 80px;}
+    #please{display:none;margin:100px;position:fixed;padding-top:50px;padding-bottom:50px;top:20%;}
+    .fenye{cursor:pointer;}
+    #del{list-style: none;cursor: pointer}
+   p{padding-top:8px;margin-left:10px;padding-bottom: 5px;}
+    .content{border-bottom: 1px solid #c0c0c0;}
+    #headImg{position:absolute;right:30px;display:none;}
+    #bigqrcode{width:150px;height:150px;margin-top:50px;float:left;margin-left:20px;display:none;}
+    .footer-text li{
+        display: inline-block;}
+    .footer-text li p{font-size: 14px;}
+</style>
+<body>
+<div id="headImg"><img class="img-thumbnail" style="width:160px;height:140px;margin-top:16px;" src="<%= headImage %>"/></div>
+<div id="bigqrcode" style=""><img src="/images/qrcode.png"></div>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">小小相册</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/">全部相册<span class="sr-only">(current)</span></a></li>
+                <li><a href="/up">上传</a></li>
+                <li><a href="/newfile">新建图片库</a></li>
+                <li ><img id="smallqrcode" class="img-thumbnail" src="/images/qrcode.png" style="width:40px;height:40px;margin-top:8px;cursor: pointer"/></li>
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                <li>
+                    <% if(user=="1"){ %>
+                            <p class="navbar-brand">欢迎您 <%= username %></p>
+                    <a  href="/change" class="navbar-brand" style="margin-top:-6px;"><img class="smallHead img-thumbnail" src="<%= headImage %>" style="width:50px;height:40px;"/></a>
+                    <p class="navbar-brand"><a href="/change">设置资料</a></p>
+                    </li>
+                    <% }else { %>
+                    <li>
+                            <a class="navbar-brand" href="/register">注册</a>
+                    </li>
+                <li>
+                            <a class="navbar-brand" href="/login">登录</a>
+
+                    </li>
+                    <% }%>
+            </ul>
+
+        </div><!-- /.navbar-collapse -->
+
+
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="container">
+    <div class="row">
+        <% for(var i=0;i<files.length;i++){ %>
+        <div class="col-sm-4 col-md-2">
+            <a href="<%= files[i] %>" class="thumbnail" style=" background:#eee;">
+                <img src="images/file.png" alt="...">
+                <div class="caption">
+                    <h3><%= files[i] %></h3>
+                </div>
+            </a>
+        </div>
+        <% } %>
+    </div>
+</div>
+<h3>留言板</h3>
+<div class="container col-lg-offset-3">
+    <div class="row">
+        <form class="form-horizontal col-lg-6">
+            <div class="form-group">
+                <label for="xingming" class="col-sm-2 control-label">姓名</label>
+
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="xingming" disabled name="xingming" value="<%= username %>">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="liuyan" class="col-sm-2 control-label">留言</label>
+
+                <div class="col-sm-10">
+                    <textarea class="form-control" rows="3" name="liuyan" id="liuyan" placeholder="内容字数小于50"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button id="tijiao" type="button" class="btn btn-success">提交</button>
+                </div>
+            </div>
+            <div class="alert alert-success" role="alert" id="chenggong">
+                <a href="#" class="alert-link">表单已经成功提交</a>
+            </div>
+            <div class="alert alert-danger" role="alert" id="shibai">
+                <a href="#" class="alert-link">表单提交失败</a>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="col-lg-offset-3">
+    <div class="alert alert-danger col-lg-4 col-lg-offset-10" id="please">
+        <a href="#" class="alert-link">请登录！！</a>
+    </div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <% for(var i=1;i<=count;i++){ %>
+            <li class="fenye"><a><%= i %></a></li>
+            <% } %>
+        </ul>
+    </nav>
+</div>
+
+<div id="liuyanban">
+</div>
+<footer>
+    <div class="footer" role="navigation">
+        <div class="container">
+            <div class="navbar-text">
+                <ul class="footer-text">
+                    <li> <p>Copyright © 2017  Project Share-space - Last updated Wed, Dec 27, 2017</p></li>
+                    <li style="margin-left:40px;"><a href="" class="twitter-follow-button" data-show-count="false">Follow @xzy</a></li>
+                </ul>
+
+            </div>
+
+
+        </div>
+    </div>
+</footer>
+</body>
+</html>
+ <script type="text/template" id="muban">
+<div>
+<div class="list-group  col-lg-6 col-lg-offset-3 content">
+    <a href="#" class="list-group-item active">
+        <h5 class="list-group-item-heading">姓名： {{= xingming }}</h5>
+        <img style="width:50px;height:45px;" src="{{= xingming}}.jpg" class="list-group-item-heading img-thumbnail"/>
+    </a>
+        <p class="list-group-item-text text">内容： {{= liuyan }}</p>
+        <p class="list-group-item-text">时间： {{= shijian }}</p>
+        <a class="list-group-item-text" style="cursor: pointer; margin-left:10px;" id="del" onclick="deletes()" data-del="{{= id }}">删除</a>
+</div>
+</div>
+ </script>
+ <script type="text/javascript">
+     var num=0;
+     $("#tijiao").click(function(){
+  $.post("/tijiao",{
+    "xingming":$("#xingming").val(),
+    "liuyan":$("#liuyan").val(),
+      "shijian":new Date(),
+  },function(result){
+    if(result.result==1){
+        $("#chenggong").fadeIn(1500).fadeOut();
+    }else if(result.result==-1){
+        $("#shibai").fadeIn(1500).fadeOut();
+    }else if(result.result==-2){
+        console.log("1111");
+      $("#please").fadeIn(2000).fadeOut();
+    }
+  });
+         $("#liuyan").val("");
+        setTimeout(function () {
+            new getData(num);
+        },800) ;
+     });
+     getData(0);
+     function getData(page) {
+         $.get("/du?page="+page+ "random="+Math.random()*100,function(result){
+             $("#liuyanban").html("");
+             var compiled = _.template($("#muban").html());
+             for(var i=0;i<result.result.length;i++){
+                 var html=compiled({
+                     "xingming":result.result[i].xingming,
+                     "liuyan":result.result[i].liuyan,
+                     "shijian":new Date().toLocaleString(),
+                     "id":result.result[i]._id
+                 });
+                 $("#liuyanban").append($(html));
+             }
+         })
+     }
+     $(".fenye:first").addClass("active");
+$(".fenye").click(function(){
+    getData($(this).index());
+    num=$(this).index();
+    $(this).addClass("active").siblings().removeClass("active");
+});
+    function deletes() {
+            $.get("/del?page=" + $("#del").attr("data-del"), function (result) {
+                if (result.result == 1) {
+                    getData(num);
+                }else if(result.result==-1){
+                    $("#please").fadeIn(2000).fadeOut();
+                }
+            });
+    }
+    $(".smallHead").mousemove(function () {
+        $("#headImg").fadeIn(800);
+    })
+     $(".smallHead").mouseout(function () {
+        $("#headImg").fadeOut(800);
+    })
+     $("#smallqrcode").mousemove(function () {
+         $("#bigqrcode").fadeIn(800);
+     })
+     $("#smallqrcode").mouseout(function () {
+         $("#bigqrcode").fadeOut(800);
+     })
+ </script>
